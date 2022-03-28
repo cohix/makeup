@@ -1,6 +1,6 @@
-# Makeup 💄
+# 💅🏽 Makeup 💄
 
-A local development tool to replace Docker Compose, based on Make.
+> A local development tool to replace Docker Compose, based on Make.
 
 Makeup uses simple Makefiles to create a faster developer workflow compared to Docker and docker-compose. It uses locally installed tools and a version-checking mechanism to get reasonably-sane builds, and runs things (like multiple webservices) in parallel, a la Compose.
 
@@ -8,11 +8,14 @@ There are three main components of `makeup`, the `main.mk` file (which includes 
 
 The `makeup` tool is required to get started (and to get the most top-notch experience), but not required for anyone else to use your project (which is part of the beauty).
 
+✨ Check out the full [usage instructions](./USAGE.md) ✨
+
 ### Commands
 
 Implemented:
 - `makeup`: builds each component sequentially, and then runs your entire project
 - `makeup test` : tests each component sequentially
+- `makeup clean` : cleans each of the components in the project
 In progress:
 - `makeup generate` : generates the main `Makefile` for anyone to use.
 
