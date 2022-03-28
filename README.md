@@ -4,7 +4,12 @@
 
 Makeup uses simple Makefiles to create a faster developer workflow compared to Docker and docker-compose. It uses locally installed tools and a version-checking mechanism to get reasonably-sane builds, and runs things (like multiple webservices) in parallel, a la Compose.
 
-There are three main components of `makeup`, the `main.mk` file (which includes tool version checks), individial component `.mk` files (with `build`, `run`, `test`, `env`, and `clean` targets), and the optional generated `Makefile`, which allows anyone who isn't using `makeup` to build and run a project just as easily. 
+Basically, the `makeup` command will build all of the components of your application and then run them together, to make things like microservices easier.
+
+There are three main components of `makeup`: 
+- The `main.mk` file (which includes tool version checks).
+- Individual component `.mk` files (with `build`, `run`, `test`, `env`, and `clean` targets).
+- Otional generated `Makefile`, which allows anyone who isn't using `makeup` to build and run your project just as easily.
 
 The `makeup` tool is required to get started (and to get the most top-notch experience), but not required for anyone else to use your project (which is part of the beauty).
 
