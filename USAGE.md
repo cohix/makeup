@@ -35,7 +35,9 @@ clean:
 
 As you can see, Makeup uses these standardized targets to control the lifecycle of your environment.
 
-You can run `makeup` to build each component and start them all, together. 
+You can run `makeup` to build each component and start them all, together.
+
+The output of the `env` target will be used to set environment variables when running each component. Using standard `KEY=VALUE` syntax, you can use things like `echo` or `cat values.env` to load anything you need into each component's environment.
 
 Other commands include `makeup test` and `makeup clean` which run the `test` and `clean` targets on each of your components, sequentially.
 
