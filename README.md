@@ -21,6 +21,7 @@ Implemented:
 - `makeup`: builds each component sequentially, and then runs your entire project
 - `makeup test` : tests each component sequentially
 - `makeup clean` : cleans each of the components in the project
+
 In progress:
 - `makeup generate` : generates the main `Makefile` for anyone to use.
 
