@@ -1,0 +1,20 @@
+builds:
+  - goos:
+      - linux
+      - darwin
+    goarch:
+      - amd64
+      - arm64
+    env:
+      - CGO_ENABLED=0
+    ldflags:
+        - -extldflags=-static
+
+changelog:
+  skip: true
+
+checksum:
+  name_template: checksums.txt
+
+archives:
+  - name_template: makeup-v{{ .Version }}-{{ .Os }}-{{ .Arch }}
