@@ -25,6 +25,9 @@ Implemented:
 In progress:
 - `makeup generate` : generates the main `Makefile` for anyone to use.
 
+Here's an example (from this repo!):
+<img width="477" alt="Screen Shot 2022-03-28 at 6 02 12 PM" src="https://user-images.githubusercontent.com/5942370/160494661-f731be1d-d579-4bb1-acf7-7575adcb22e7.png">
+
 That's it for now.
 
 Copyright Connor Hicks and external contributors, 2022. Apache-2.0 licensed, see LICENSE file.
