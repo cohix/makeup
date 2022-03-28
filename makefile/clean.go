@@ -32,7 +32,7 @@ func (m *Makefile) CleanAll() error {
 			fmt.Sprintf("BIN_DEST=%s", binDest),
 		}
 
-		if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s clean", componentMakefile), componentDir, env...); err != nil {
+		if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s clean", componentMakefile), componentDir, nil, env...); err != nil {
 			return errors.Wrapf(err, "failed to clean %s", componentDir)
 		}
 

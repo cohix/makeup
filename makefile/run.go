@@ -47,7 +47,9 @@ func (m *Makefile) RunAll() error {
 		)
 
 		errGroup.Go(func() error {
-			if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s run", componentMakefile), componentDir, env...); err != nil {
+			writer := exec.NewPrefixWriter(componentName, os.Stdout)
+
+			if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s run", componentMakefile), componentDir, writer, env...); err != nil {
 				return errors.Wrapf(err, "failed to run %s", componentDir)
 			}
 

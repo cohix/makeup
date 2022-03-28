@@ -32,7 +32,7 @@ func (m *Makefile) TestAll() error {
 			fmt.Sprintf("BIN_DEST=%s", binDest),
 		}
 
-		if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s test", componentMakefile), componentDir, env...); err != nil {
+		if _, err := exec.RunInDir(fmt.Sprintf("make -s -f %s test", componentMakefile), componentDir, nil, env...); err != nil {
 			return errors.Wrapf(err, "failed to test %s", componentDir)
 		}
 
