@@ -19,9 +19,9 @@ func (m *Makefile) BuildAll() error {
 
 	binBase := filepath.Join(cwd, ".bin")
 
-	for _, mkPath := range m.Includes {
-		componentDir := filepath.Dir(mkPath)
-		componentMakefile := filepath.Base(mkPath)
+	for _, incl := range m.Includes {
+		componentDir := filepath.Dir(incl.Path)
+		componentMakefile := filepath.Base(incl.Path)
 		componentName := strings.TrimSuffix(componentMakefile, ".mk")
 
 		fmt.Println("building:", componentName)

@@ -1,12 +1,9 @@
 package makefile
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"os"
 	"strings"
-	"text/scanner"
 
 	"github.com/pkg/errors"
 
@@ -14,15 +11,23 @@ import (
 )
 
 const (
+	includePrefix = "include "
 	checkPrefix   = "# check "
 	equalPrefix   = "# equal "
-	includePrefix = "include "
+	externPrefix  = "# extern "
+	rootPrefix    = "# root "
 )
 
 // Makefile is a lightly-parsed Makefile
 type Makefile struct {
 	Checks   []Check
-	Includes []string
+	Includes []include
+}
+
+// include represents an `include` statement in a Makefile, plus optional `extern` modifier
+type include struct {
+	Path   string
+	Extern string
 }
 
 // Parse reads and parses the Makefile at the given path
@@ -37,6 +42,10 @@ func Parse(path string) (*Makefile, error) {
 	mk, err := parse(file)
 	if err != nil {
 		return nil, errors.Wrapf(err, "failed to parse %s", path)
+	}
+
+	if err := mk.ensureIncludes(); err != nil {
+		return nil, errors.Wrap(err, "failed to ensureIncludes")
 	}
 
 	return mk, nil
@@ -61,7 +70,7 @@ func (m *Makefile) TestChecks() error {
 func parse(file *os.File) (*Makefile, error) {
 	mk := &Makefile{
 		Checks:   []Check{},
-		Includes: []string{},
+		Includes: []include{},
 	}
 
 	scn := newScanner(file)
@@ -96,70 +105,51 @@ func parse(file *os.File) (*Makefile, error) {
 		} else if strings.HasPrefix(line, includePrefix) {
 			includePath := strings.TrimPrefix(line, includePrefix)
 
-			mk.Includes = append(mk.Includes, includePath)
+			incl := include{
+				Path: includePath,
+			}
+
+			mk.Includes = append(mk.Includes, incl)
+		} else if strings.HasPrefix(line, externPrefix) {
+			externPath := strings.TrimPrefix(line, externPrefix)
+
+			includeLine, err := scn.readLine()
+			if err != nil {
+				return nil, errors.Wrap(err, "failed to readLine")
+			}
+
+			if !strings.HasPrefix(includeLine, includePrefix) {
+				return nil, fmt.Errorf("line following extern is not an 'include' statement (got %s)", includeLine)
+			}
+
+			includePath := strings.TrimPrefix(includeLine, includePrefix)
+
+			incl := include{
+				Path:   includePath,
+				Extern: externPath,
+			}
+
+			mk.Includes = append(mk.Includes, incl)
 		}
 	}
 
 	return mk, nil
 }
 
-type makeScanner struct {
-	scn scanner.Scanner
-}
+func (m *Makefile) ensureIncludes() error {
+	for _, incl := range m.Includes {
+		if _, err := os.Stat(incl.Path); err != nil {
+			if errors.Is(err, os.ErrNotExist) {
+				if incl.Extern != "" {
+					return errors.Wrapf(err, "missing %s from extern %s", incl.Path, incl.Extern)
+				} else {
+					return errors.Wrap(err, "missing %s")
+				}
+			}
 
-func newScanner(rd io.Reader) *makeScanner {
-	scn := scanner.Scanner{}
-	scn.Init(rd)
-
-	m := &makeScanner{
-		scn: scn,
-	}
-
-	return m
-}
-
-// readLine reads the next line of the file
-func (m *makeScanner) readLine() (string, error) {
-	var err error
-
-	m.scn.Error = func(_ *scanner.Scanner, msg string) {
-		if msg != "" {
-			err = errors.New(msg)
+			return errors.Wrapf(err, "failed to Stat %s", incl.Path)
 		}
 	}
 
-	buf := bytes.Buffer{}
-
-	eof := false
-
-	for {
-		next := m.scn.Next()
-		if next == scanner.EOF {
-			eof = true
-			break
-		}
-
-		stringNext := string(next)
-
-		if err != nil {
-			return "", errors.Wrap(err, "failed to scn.Next")
-		}
-
-		if stringNext == "\n" {
-			break
-		}
-
-		if _, err := buf.Write([]byte(stringNext)); err != nil {
-			return "", errors.Wrap(err, "failed to buf.Write")
-		}
-	}
-
-	out := string(buf.Bytes())
-
-	// skip empty lines, recursively
-	if !eof && strings.TrimSpace(out) == "" {
-		return m.readLine()
-	}
-
-	return out, nil
+	return nil
 }

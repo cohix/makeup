@@ -24,18 +24,18 @@ func (m *Makefile) RunAll() error {
 
 	errGroup, _ := errgroup.WithContext(context.Background())
 
-	for _, mkPath := range m.Includes {
-		componentDir := filepath.Dir(mkPath)
-		componentMakefile := filepath.Base(mkPath)
+	for _, incl := range m.Includes {
+		componentDir := filepath.Dir(incl.Path)
+		componentMakefile := filepath.Base(incl.Path)
 		componentName := strings.TrimSuffix(componentMakefile, ".mk")
 
 		fmt.Println("running:", componentName)
 
 		binDest := filepath.Join(binBase, componentName)
 
-		componentEnv, err := envForMkPath(mkPath)
+		componentEnv, err := envForMkPath(incl.Path)
 		if err != nil {
-			return errors.Wrapf(err, "failed to envForMkPath %s", mkPath)
+			return errors.Wrapf(err, "failed to envForMkPath %s", incl.Path)
 		}
 
 		// grab the 'env' target output and add some makeup-specific things
