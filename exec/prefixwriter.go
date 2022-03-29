@@ -62,7 +62,7 @@ func (p *PrefixWriter) Write(in []byte) (int, error) {
 	}
 
 	for _, l := range lines {
-		spaces := strings.Repeat(" ", 12-len(p.prefix))
+		spaces := strings.Repeat(" ", 14-len(p.prefix))
 		prefixVal := fmt.Sprintf("%s%s| ", p.prefix, spaces)
 
 		prefixedLine := append([]byte(prefixVal), l...)

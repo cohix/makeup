@@ -33,7 +33,7 @@ func (m *Makefile) RunAll() error {
 
 		binDest := filepath.Join(binBase, componentName)
 
-		componentEnv, err := envForMkPath(incl.Path)
+		componentEnv, err := m.envForMkPath(incl.Path)
 		if err != nil {
 			return errors.Wrapf(err, "failed to envForMkPath %s", incl.Path)
 		}
@@ -60,14 +60,37 @@ func (m *Makefile) RunAll() error {
 	return errGroup.Wait()
 }
 
-func envForMkPath(mkPath string) (string, error) {
+func (m *Makefile) envForMkPath(mkPath string) (string, error) {
 	componentDir := filepath.Dir(mkPath)
 	componentMakefile := filepath.Base(mkPath)
+	componentName := strings.TrimSuffix(componentMakefile, ".mk")
 
-	out, err := exec.RunSilent(fmt.Sprintf("make -s -f %s env", componentMakefile), componentDir)
-	if err != nil {
-		return "", errors.Wrapf(err, "failed to get env %s", componentDir)
+	var out string
+	var err error
+
+	if m.ContainsOverride(componentName, "env") {
+		overrideTarget := fmt.Sprintf("%s/%s", componentName, "env")
+
+		out, err = exec.RunSilent(fmt.Sprintf("make -s -f %s %s", m.FullPath, overrideTarget), "")
+		if err != nil {
+			return "", errors.Wrapf(err, "failed to get override env %s", componentDir)
+		}
+	} else {
+		out, err = exec.RunSilent(fmt.Sprintf("make -s -f %s env", componentMakefile), componentDir)
+		if err != nil {
+			return "", errors.Wrapf(err, "failed to get env %s", componentDir)
+		}
 	}
 
-	return out, nil
+	envLines := []string{}
+
+	// remove any lines that don't look like an env statement, i.e. KEY=VALUE
+	outLines := strings.Split(out, "\n")
+	for _, l := range outLines {
+		if strings.Contains(l, "=") {
+			envLines = append(envLines, l)
+		}
+	}
+
+	return strings.Join(envLines, "\n"), nil
 }
