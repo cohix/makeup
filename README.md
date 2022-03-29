@@ -9,7 +9,7 @@ Basically, the `makeup` command will build all of the components of your applica
 There are three main components of `makeup`: 
 - The `main.mk` file (which includes tool version checks).
 - Individual component `.mk` files (with `build`, `run`, `test`, `env`, and `clean` targets).
-- Otional generated `Makefile`, which allows anyone who isn't using `makeup` to build and run your project just as easily.
+- Optional generated `Makefile`, which allows anyone who isn't using `makeup` to build and run your project just as easily.
 
 The `makeup` tool is required to get started (and to get the most top-notch experience), but not required for anyone else to use your project (which is part of the beauty).
 

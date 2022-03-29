@@ -1,5 +1,4 @@
 
-
 build:
 	go build -o ${BIN_DEST}
 
