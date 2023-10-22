@@ -9,7 +9,7 @@ import (
 
 	"golang.org/x/sync/errgroup"
 
-	"github.com/cohix/makeup/exec"
+	"github.com/cohix/makeup/pkg/exec"
 	"github.com/pkg/errors"
 )
 

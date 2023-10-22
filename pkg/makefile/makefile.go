@@ -8,7 +8,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"github.com/cohix/makeup/exec"
+	"github.com/cohix/makeup/pkg/exec"
 )
 
 const (

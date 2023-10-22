@@ -1,10 +1,11 @@
 package main
 
 import (
-	"log"
+	"log/slog"
+	"os"
 
-	"github.com/cohix/makeup/cli"
-	"github.com/cohix/makeup/commands"
+	"github.com/cohix/makeup/cmd/makeup/cli"
+	"github.com/cohix/makeup/cmd/makeup/commands"
 )
 
 func main() {
@@ -17,6 +18,7 @@ func main() {
 	)
 
 	if err := cli.Run(); err != nil {
-		log.Fatal(err)
+		slog.Error(err.Error())
+		os.Exit(1)
 	}
 }

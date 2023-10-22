@@ -6,7 +6,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/cohix/makeup/exec"
+	"github.com/cohix/makeup/pkg/exec"
 	"github.com/pkg/errors"
 )
 

@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/cohix/makeup/makefile"
+	"github.com/cohix/makeup/pkg/makefile"
 	"github.com/pkg/errors"
 )
 
