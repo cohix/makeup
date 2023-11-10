@@ -12,6 +12,8 @@ func main() {
 	cli.Setup(
 		commands.Root,
 		map[string]cli.Command{
+			"add":   commands.Add,
+			"build": commands.Build,
 			"test":  commands.Test,
 			"clean": commands.Clean,
 		},

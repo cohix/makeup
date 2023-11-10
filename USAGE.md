@@ -11,7 +11,7 @@ include ./testapp/testapp.mk
 include ./testapp2/testapp2.mk
 ```
 
-The first two lines is a 'check', which ensure the correct versions of tools are being used. This can ensure that you and your team are all using the same version of a dependency, for example. You can have as many checks as you want, but they must be sequential lines that start with `# check` and `# equal`. 
+The first two lines are a 'check', which ensure the correct versions of tools are being used. This can ensure that you and your team are all using the same version of a dependency, for example. You can have as many checks as you want, but they must be sequential lines that start with `# check` and `# equal`. 
 
 > The equality is actually a 'contains' check, so even though `go version` outputs something like `go version go1.18 darwin/arm64`, since it contains `1.18`, it passes the check.
 
